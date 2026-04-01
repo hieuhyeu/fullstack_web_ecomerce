@@ -1,0 +1,52 @@
+# Dependencies
+node_modules/
+package-lock.json
+yarn.lock
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Frontend Build
+fe/dist/
+fe/build/
+*.tsbuildinfo
+
+# Backend Java/Maven
+be/target/
+be/**/*.class
+be/*.jar
+be/*.war
+be/*.ear
+be/.idea
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+
+# Database
+*.sqlite
+*.db
+
+# Cache
+.next/
+out/
+.cache/
+
+# Misc
+.prettierignore
+.eslintignore

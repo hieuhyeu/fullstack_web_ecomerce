@@ -1,0 +1,286 @@
+/* ============================================
+   ADIDAS-INSPIRED DESIGN SYSTEM
+   ============================================ */
+
+/* CSS Reset & Variables */
+:root {
+  /* Colors */
+  --color-black: #000000;
+  --color-white: #FFFFFF;
+  --color-dark: #1a1a1a;
+  --color-dark-2: #2d2d2d;
+  --color-dark-3: #3d3d3d;
+  --color-grey-light: #f5f5f5;
+  --color-grey: #e5e5e5;
+  --color-grey-mid: #999999;
+  --color-grey-dark: #767677;
+  --color-accent: #FFD700;
+  --color-red: #e63946;
+  --color-success: #2ecc71;
+
+  /* Typography */
+  --font-heading: 'Oswald', sans-serif;
+  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+
+  /* Spacing */
+  --header-height: 60px;
+  --container-max: 1440px;
+  --container-padding: 24px;
+
+  /* Transitions */
+  --transition-fast: 0.15s ease;
+  --transition-normal: 0.3s ease;
+  --transition-slow: 0.5s ease;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
+  --shadow-md: 0 4px 12px rgba(0,0,0,0.1);
+  --shadow-lg: 0 8px 30px rgba(0,0,0,0.12);
+}
+
+/* Reset */
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-body);
+  color: var(--color-black);
+  background-color: var(--color-white);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+ul, ol {
+  list-style: none;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  outline: none;
+  font-family: var(--font-body);
+}
+
+input, textarea, select {
+  font-family: var(--font-body);
+  outline: none;
+}
+
+/* ============================================
+   UTILITY CLASSES
+   ============================================ */
+
+.container {
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: 0 var(--container-padding);
+}
+
+.section-title {
+  font-family: var(--font-heading);
+  font-size: 2rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-bottom: 32px;
+}
+
+/* Primary Button - Adidas style: black bg, white text, no border-radius */
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: var(--color-black);
+  color: var(--color-white);
+  font-family: var(--font-heading);
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  padding: 14px 32px;
+  border: 2px solid var(--color-black);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-primary::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
+  transition: left var(--transition-slow);
+}
+
+.btn-primary:hover {
+  background: var(--color-dark-2);
+}
+
+.btn-primary:hover::after {
+  left: 100%;
+}
+
+.btn-primary:disabled {
+  background: var(--color-grey-mid);
+  border-color: var(--color-grey-mid);
+  cursor: not-allowed;
+}
+
+/* Secondary Button */
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: var(--color-white);
+  color: var(--color-black);
+  font-family: var(--font-heading);
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  padding: 14px 32px;
+  border: 2px solid var(--color-black);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.btn-secondary:hover {
+  background: var(--color-black);
+  color: var(--color-white);
+}
+
+/* Input Fields */
+.input-field {
+  width: 100%;
+  padding: 14px 16px;
+  border: 1px solid var(--color-grey);
+  font-size: 0.9375rem;
+  background: var(--color-white);
+  transition: border-color var(--transition-fast);
+}
+
+.input-field:focus {
+  border-color: var(--color-black);
+  border-width: 2px;
+  padding: 13px 15px;
+}
+
+.input-field::placeholder {
+  color: var(--color-grey-mid);
+}
+
+/* Form Group */
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 8px;
+  color: var(--color-dark);
+}
+
+/* Skeleton Loading */
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.skeleton {
+  background: linear-gradient(90deg, var(--color-grey-light) 25%, var(--color-grey) 50%, var(--color-grey-light) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 0;
+}
+
+/* Page transition */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.page-enter {
+  animation: fadeInUp 0.4s ease forwards;
+}
+
+/* Badge */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-black);
+  color: var(--color-white);
+  font-size: 0.6875rem;
+  font-weight: 700;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 6px;
+  border-radius: 50%;
+}
+
+/* ============================================
+   SCROLLBAR
+   ============================================ */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-grey-light);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-grey-mid);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-dark-3);
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+@media (max-width: 768px) {
+  :root {
+    --container-padding: 16px;
+  }
+
+  .section-title {
+    font-size: 1.5rem;
+    margin-bottom: 24px;
+  }
+}
