@@ -23,7 +23,16 @@ export default function HomePage() {
       {/* Hero Banner */}
       <section className="hero">
         <div className="hero__bg">
-          <div className="hero__gradient" />
+          <video 
+            autoPlay 
+            muted 
+            loop 
+            playsInline 
+            className="hero__video"
+            poster="https://brand.assets.adidas.com/video/upload/f_auto,q_auto/if_w_gt_1920,w_1920/global_wc26_home_jerseys_football_fw25_launch_multifed_banner_hero_9_final_d_63c997f79f.jpg"
+          >
+            <source src="https://brand.assets.adidas.com/video/upload/f_auto,q_auto/if_w_gt_1920,w_1920/global_wc26_home_jerseys_football_fw25_launch_multifed_banner_hero_9_final_d_63c997f79f.mp4" type="video/mp4" />
+          </video>
         </div>
         <div className="hero__content container">
           <span className="hero__tag">BỘ SƯU TẬP MỚI</span>

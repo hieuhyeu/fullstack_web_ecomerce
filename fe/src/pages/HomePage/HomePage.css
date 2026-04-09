@@ -6,10 +6,15 @@
 }
 
 @media (max-width: 1024px) {
-  .product-grid { grid-template-columns: repeat(3, 1fr); }
+  .product-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
 }
+
 @media (max-width: 768px) {
-  .product-grid { grid-template-columns: repeat(2, 1fr); }
+  .product-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 
 /* Hero */
@@ -19,7 +24,8 @@
   min-height: 500px;
   max-height: 800px;
   display: flex;
-  align-items: center;
+  align-items: flex-end;
+  padding-bottom: 80px;
   overflow: hidden;
   margin-bottom: 60px;
 }
@@ -27,21 +33,27 @@
 .hero__bg {
   position: absolute;
   inset: 0;
-  background: linear-gradient(135deg, #000000 0%, #1a1a1a 40%, #2d2d2d 70%, #000000 100%);
+  background: #000;
 }
 
-.hero__gradient {
-  position: absolute;
-  inset: 0;
-  background: 
-    radial-gradient(ellipse at 20% 50%, rgba(255,215,0,0.08) 0%, transparent 50%),
-    radial-gradient(ellipse at 80% 20%, rgba(255,255,255,0.05) 0%, transparent 40%);
+.hero__video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
+
+
 
 .hero__content {
   position: relative;
   z-index: 2;
   color: var(--color-white);
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  text-align: right;
+  text-shadow: 0 4px 8px rgba(0,0,0,0.5);
 }
 
 .hero__tag {
@@ -51,11 +63,11 @@
   font-weight: 600;
   letter-spacing: 4px;
   text-transform: uppercase;
-  background: rgba(255,255,255,0.1);
+  background: rgba(255, 255, 255, 0.1);
   padding: 8px 20px;
   margin-bottom: 24px;
   backdrop-filter: blur(10px);
-  border: 1px solid rgba(255,255,255,0.15);
+  border: 1px solid rgba(255, 255, 255, 0.15);
 }
 
 .hero__title {
@@ -71,7 +83,7 @@
 .hero__subtitle {
   font-size: 1.125rem;
   font-weight: 300;
-  color: rgba(255,255,255,0.7);
+  color: rgba(255, 255, 255, 0.7);
   max-width: 500px;
   margin-bottom: 36px;
   line-height: 1.6;
@@ -115,7 +127,7 @@
 .categories__overlay {
   position: absolute;
   inset: 0;
-  background: rgba(0,0,0,0.4);
+  background: rgba(0, 0, 0, 0.4);
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -125,7 +137,7 @@
 }
 
 .categories__item:hover .categories__overlay {
-  background: rgba(0,0,0,0.5);
+  background: rgba(0, 0, 0, 0.5);
 }
 
 .categories__name {
@@ -190,26 +202,25 @@
 
 /* Banner CTA */
 .banner-cta {
-  background: linear-gradient(135deg, #1a1a1a 0%, #000000 100%);
-  padding: 100px 0;
+  background: #000 url("https://brand.assets.adidas.com/image/upload/f_auto,q_auto:best,fl_lossy/if_w_gt_1920,w_1920/global_football_is_the_muse_originals_ss26_launch_hp_catlp_banner_hero_1_d_3a7e3ac795.jpg") top center/100% auto no-repeat;
+  height: 75vh;
+  min-height: 550px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-start;
+  padding-bottom: 60px;
   margin-bottom: 80px;
   position: relative;
   overflow: hidden;
 }
 
-.banner-cta::before {
-  content: '';
-  position: absolute;
-  top: -50%;
-  right: -20%;
-  width: 60%;
-  height: 200%;
-  background: radial-gradient(ellipse, rgba(255,215,0,0.06) 0%, transparent 70%);
-}
+
 
 .banner-cta__inner {
   position: relative;
   z-index: 1;
+  width: 100%;
+  text-shadow: 0 4px 8px rgba(0,0,0,0.6);
 }
 
 .banner-cta__tag {
@@ -224,19 +235,19 @@
 
 .banner-cta__title {
   font-family: var(--font-heading);
-  font-size: 3.5rem;
+  font-size: 2.25rem;
   font-weight: 700;
   color: var(--color-white);
-  letter-spacing: 3px;
+  letter-spacing: 2px;
   line-height: 1.1;
-  margin-bottom: 16px;
+  margin-bottom: 12px;
 }
 
 .banner-cta__text {
-  font-size: 1rem;
-  color: rgba(255,255,255,0.6);
-  margin-bottom: 32px;
-  max-width: 400px;
+  font-size: 0.875rem;
+  color: rgba(255, 255, 255, 0.9);
+  margin-bottom: 24px;
+  max-width: 350px;
 }
 
 /* New Arrivals */
@@ -287,9 +298,24 @@
 }
 
 @media (max-width: 768px) {
-  .hero__title { font-size: 3rem; }
-  .categories__grid { grid-template-columns: 1fr; }
-  .banner-cta { padding: 60px 0; }
-  .banner-cta__title { font-size: 2.5rem; }
-  .features__grid { grid-template-columns: repeat(2, 1fr); }
+  .hero__title {
+    font-size: 3rem;
+  }
+
+  .categories__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .banner-cta {
+    height: 400px;
+    padding-bottom: 40px;
+  }
+
+  .banner-cta__title {
+    font-size: 1.5rem;
+  }
+
+  .features__grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
