@@ -23,13 +23,14 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      
+      - name: Debug files
+        run: ls -laR ./be
 
       - name: Login to Docker Hub
         run: echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
 
       - name: Build BE image
-        run: docker build -t ${{ env.BE_IMAGE }}:latest -t ${{ env.BE_IMAGE }}:${{ github.sha }} ./be
+        run: docker build -f ./be/Dockerfile -t ${{ env.BE_IMAGE }}:latest -t ${{ env.BE_IMAGE }}:${{ github.sha }} ./be
 
       - name: Push BE image
         run: |
@@ -46,13 +47,14 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-     
+      - name: Debug files
+        run: ls -laR ./fe
 
       - name: Login to Docker Hub
         run: echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
 
       - name: Build FE image
-        run: docker build -t ${{ env.FE_IMAGE }}:latest -t ${{ env.FE_IMAGE }}:${{ github.sha }} ./fe
+        run: docker build -f ./fe/Dockerfile -t ${{ env.FE_IMAGE }}:latest -t ${{ env.FE_IMAGE }}:${{ github.sha }} ./fe
 
       - name: Push FE image
         run: |
