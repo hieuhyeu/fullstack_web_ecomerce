@@ -1,0 +1,135 @@
+name: 🚀 Deploy to AWS
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+env:
+  BE_IMAGE: hyeu420/ecommerce-be
+  FE_IMAGE: hyeu420/ecommerce-fe
+  LAUNCH_TEMPLATE_NAME: ecommerce-lt
+  ASG_NAME: ecommerce-asg
+jobs:
+  # ─────────────────────────────────────────────
+  # JOB 1: Build & Push Backend
+  # ─────────────────────────────────────────────
+  build-backend:
+    name: 🔧 Build Backend
+    runs-on: ubuntu-latest
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+
+      - name: 🔐 Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: 🐳 Build & Push BE image
+        uses: docker/build-push-action@v5
+        with:
+          context: ./be
+          push: true
+          tags: |
+            ${{ env.BE_IMAGE }}:latest
+            ${{ env.BE_IMAGE }}:${{ github.sha }}
+
+  # ─────────────────────────────────────────────
+  # JOB 2: Build & Push Frontend (song song với BE)
+  # ─────────────────────────────────────────────
+  build-frontend:
+    name: 🎨 Build Frontend
+    runs-on: ubuntu-latest
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+
+      - name: 🔐 Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: 🐳 Build & Push FE image
+        uses: docker/build-push-action@v5
+        with:
+          context: ./fe
+          push: true
+          tags: |
+            ${{ env.FE_IMAGE }}:latest
+            ${{ env.FE_IMAGE }}:${{ github.sha }}
+
+  # ─────────────────────────────────────────────
+  # JOB 3: Deploy — sau khi cả 2 image push xong
+  # ─────────────────────────────────────────────
+  deploy:
+    name: 🚀 Deploy to AWS
+    runs-on: ubuntu-latest
+    needs: [build-backend, build-frontend]
+    steps:
+      - name: 🔐 Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: 📝 Create new Launch Template version
+        run: |
+          CURRENT=$(aws ec2 describe-launch-template-versions \
+            --launch-template-name "${{ env.LAUNCH_TEMPLATE_NAME }}" \
+            --versions '$Default' \
+            --query "LaunchTemplateVersions[0].VersionNumber" \
+            --output text)
+          echo "Current version: $CURRENT"
+
+          NEW=$(aws ec2 create-launch-template-version \
+            --launch-template-name "${{ env.LAUNCH_TEMPLATE_NAME }}" \
+            --source-version "$CURRENT" \
+            --version-description "deploy-${{ github.sha }}" \
+            --query "LaunchTemplateVersion.VersionNumber" \
+            --output text)
+          echo "New version: $NEW"
+
+          aws ec2 modify-launch-template \
+            --launch-template-name "${{ env.LAUNCH_TEMPLATE_NAME }}" \
+            --default-version "$NEW"
+          echo "✅ Launch Template updated to version $NEW"
+
+      - name: 🔄 Trigger ASG Instance Refresh
+        run: |
+          aws autoscaling start-instance-refresh \
+            --auto-scaling-group-name "${{ env.ASG_NAME }}" \
+            --preferences '{
+              "MinHealthyPercentage": 50,
+              "InstanceWarmup": 300
+            }'
+          echo "✅ Instance Refresh started!"
+
+      - name: ⏳ Wait for deployment
+        run: |
+          echo "Monitoring Instance Refresh..."
+          for i in $(seq 1 40); do
+            STATUS=$(aws autoscaling describe-instance-refreshes \
+              --auto-scaling-group-name "${{ env.ASG_NAME }}" \
+              --query "InstanceRefreshes[0].Status" \
+              --output text)
+
+            echo "[$i/40] Status: $STATUS"
+
+            if [ "$STATUS" = "Successful" ]; then
+              echo "🎉 Deployment completed successfully!"
+              exit 0
+            elif [ "$STATUS" = "Failed" ] || [ "$STATUS" = "Cancelled" ]; then
+              echo "❌ Deployment failed: $STATUS"
+              exit 1
+            fi
+            sleep 30
+          done
+          echo "⚠️ Timeout — check ASG console manually"
+          exit 1
