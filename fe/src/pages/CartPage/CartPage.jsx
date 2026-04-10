@@ -79,7 +79,13 @@ export default function CartPage() {
       <div className="container">
         <h1 className="cart-page__title">GIỎ HÀNG CỦA BẠN</h1>
 
-        {items.length === 0 && !loading ? (
+        {loading && items.length === 0 ? (
+          <div className="cart-empty">
+            <FiShoppingBag size={64} className="cart-empty__icon" style={{ opacity: 0.5 }} />
+            <h2>ĐANG TẢI GIỎ HÀNG...</h2>
+            <p>Vui lòng đợi trong giây lát...</p>
+          </div>
+        ) : items.length === 0 ? (
           <div className="cart-empty">
             <FiShoppingBag size={64} className="cart-empty__icon" />
             <h2>GIỎ HÀNG TRỐNG</h2>
